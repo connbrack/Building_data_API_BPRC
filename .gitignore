@@ -1,0 +1,7 @@
+.ipynb_checkpoints
+.git
+.idea
+__pycache__
+coppertree_documentation
+login_info.txt
+example_info.txt
