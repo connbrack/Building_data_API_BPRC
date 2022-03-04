@@ -1,4 +1,4 @@
-# Building_data_API_BPRC
+# Building Data API BPRC
 
 This repo is a resource for the building team at Carleton University. It provides example API calls and workflows for those working on buildings equipped with coppertree Kaizen cloud based data collection.
 
