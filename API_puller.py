@@ -8,28 +8,27 @@ def API_puller(trend_log_list, API_key, date_range, resample=None):
 
     This function utilizes multithreading for to increase speed of API processing
 
-    Parameters
-    ----------
-    trend_log_list : Pandas Dataframe
-        a two column pandas dataframe with the trend log controller number in the in the first column
-        and the name of the trend log in the second column
+    Args:
+        trend_log_list (Pandas Dataframe):
+            a two column pandas dataframe with the trend log controller number in the in the first column
+            and the name of the trend log in the second column
+        
+        API_key (str):
+            Your api key, which can be accessed through you're Kaizen account
+            
+        date_range (list, Format: ['YYYY-MM-DD', 'YYYY-MM-DD']):
+            a list of two date strings indicating start date and end date.
+            Note: The date range is non inclusive, so the "end date" is not included in the API call
+        
+        resample (int, optional): Defaults to None.
+            Resample dataframe in minutes. For example to resample every 1 hour, enter resample=60. Fill method
+            is based on previous within the resample time frame. If there is no samples, NaN is returned
+            If none is received, no resampling will occur (warning: this may result in large outputs if
+            event based sensors are included in query). 
 
-    API_key: str
-         Your api key, which can be accessed through you're Kaizen account
-
-    date_range: list, Format: ['YYYY-MM-DD', 'YYYY-MM-DD']
-          a list of two date strings indicating start date and end date.
-          Note: The date range is non inclusive, so the "end date" is not included in the API call
-
-    resample: int, optional (default = none)
-        Resample dataframe in minutes. For example to resample every 1 hour, enter resample=60.
-        If none is received, no resampling will occur (warning: this may result in large outputs if
-        event based sensors are included in query)
-
-    Returns
-    -------
-    Dataframe
-        Dataframe of the requested sensor inputs
+    Returns:
+        Dataframe:
+            Organized dataframe of the requested sensor inputs
     """
 
     trend_log_dict = trend_log_list.to_records(index=False)
