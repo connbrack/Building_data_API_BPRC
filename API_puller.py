@@ -1,9 +1,10 @@
 import requests
+from requests.adapters import HTTPAdapter, Retry
 import pandas as pd
 import concurrent.futures
 from tqdm import tqdm
 
-def API_puller(trend_log_list, API_key, date_range, resample=None):
+def API_puller(trend_log_list, API_key, date_range, resample=None, max_workers=None):
     """Retrieves data from Coppertree Analytics Kaizen API and organizes it into a single dataframe
 
     This function utilizes multithreading for to increase speed of API processing
@@ -25,6 +26,10 @@ def API_puller(trend_log_list, API_key, date_range, resample=None):
             is based on previous within the resample time frame. If there is no samples, NaN is returned
             If none is received, no resampling will occur (warning: this may result in large outputs if
             event based sensors are included in query). 
+            
+        resample (int, optional): Defaults to None.
+            The number of threads that will open on your computer, -1 means max. Lower numbers may reduce
+            errors when overloading the API. Some trial and error is required here.
 
     Returns:
         Dataframe:
@@ -42,7 +47,7 @@ def API_puller(trend_log_list, API_key, date_range, resample=None):
 
     # Perform API calls using multi-threading
     dfs = []
-    with concurrent.futures.ThreadPoolExecutor() as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
         progress_bar = tqdm(executor.map(save_api_data, trend_log_dict), total=len(trend_log_dict))
         progress_bar.set_description('API Download')
         list(progress_bar)
@@ -54,8 +59,14 @@ def API_puller(trend_log_list, API_key, date_range, resample=None):
     for df in pbar:
         df_concat = pd.concat([df_concat, df], axis=1, join="outer")
 
+
+    # Check that all trends were downloaded
+    logs = trend_log_list.iloc[:, 1].tolist()
+    if not all(item in df_concat.columns for item in logs):
+        raise Exception("No all logs were downloaded. In some cases, reducing the max_workers may help with this issue")
+    
     # Reorder columns based on input order
-    df_concat = df_concat[trend_log_list.iloc[:, 1].tolist()]
+    df_concat = df_concat[logs]
 
     return df_concat
 
@@ -68,7 +79,11 @@ def getData(trend_log_ID, trend_log_name_ID, start, end, API_key, sample):
 
     url = 'https://kaizen.coppertreeanalytics.com/public_api/api/get_tl_data_start_end?&' \
           'api_key={}&tl={}&start={}T00:00:00&end={}T00:00:00&data=raw'.format(API_key, trend_log_ID, start, end)
-    results = requests.get(url)
+    retry_strategy = Retry(total=5, backoff_factor=1)
+    adapter = HTTPAdapter(max_retries=retry_strategy)
+    http = requests.Session()
+    http.mount("https://", adapter)
+    results = http.get(url)
     check_response(results)
 
     # Retrieve results and convert to pandas dataframe
