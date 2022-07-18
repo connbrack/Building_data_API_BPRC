@@ -26,10 +26,10 @@ def API_puller(trend_log_list, API_key, date_range, resample=None, max_workers=N
             is based on previous within the resample time frame. If there is no samples, NaN is returned
             If none is received, no resampling will occur (warning: this may result in large outputs if
             event based sensors are included in query). 
-            
+                
         max_workers (int, optional): Defaults to None.
-            The number of threads that will be used to perform API calls. -1 means max. Lower numbers may reduce
-            errors when overloading the API. Some trial and error is required here.
+            The number of threads that will be used to perform API calls. Use None in most cases. Lower numbers
+            may reduce errors by reducing frequency of calls to the API. Some trial and error is required here.
 
     Returns:
         Dataframe:
