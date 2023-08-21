@@ -4,4 +4,4 @@
 .vscode
 __pycache__
 coppertree_documentation
-login_info_v1.txt
+login_info_*.txt
