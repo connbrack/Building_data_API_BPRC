@@ -1,6 +1,7 @@
 .ipynb_checkpoints
 .git
 .idea
+.vscode
 __pycache__
 coppertree_documentation
 login_info_v1.txt
