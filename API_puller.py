@@ -23,7 +23,7 @@ def API_puller(trend_log_list, API_key, date_range, resample=None, max_workers=N
         
         resample (int, optional): Defaults to None.
             Resample dataframe in minutes. For example to resample every 1 hour, enter resample=60. Fill method
-            is based on previous within the resample time frame. If there is no samples, NaN is returned
+            is based on the last value within the resample time frame. If there is no samples, NaN is returned
             If none is received, no resampling will occur (warning: this may result in large outputs if
             event based sensors are included in query). 
                 
