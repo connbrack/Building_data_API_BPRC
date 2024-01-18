@@ -15,7 +15,7 @@ This project contains the following files:
 
 ***Omitted Documents***
 * login_info is intentionally omitted for security reasons. If you require this document or do not have the most current version contact Connor Brackley (connor.brackley@mail.concordia.ca) for more info
-	* The current version of login_info is login_info_v1.txt
+	* The current version of login_info is login_info_v2.txt
 
 Author: Connor Brackley (Connor.Brackley@mail.concordia.ca) <br>
 https://www.researchgate.net/profile/Connor-Brackley
